@@ -1,0 +1,1992 @@
+{
+	"info": {
+		"_postman_id": "1f8b9b27-47f2-4c59-8fc1-10b61e050922",
+		"name": "P3Tester (Postman)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Company",
+			"item": [
+				{
+					"name": "Delete Company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful delete\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/company?company={{studentID}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"company"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Departments",
+			"item": [
+				{
+					"name": "Insert Initial Department",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful Initial Insert\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"dept_id\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "dept_name",
+									"value": "mystery",
+									"type": "text"
+								},
+								{
+									"key": "dept_no",
+									"value": "{{studentID}}-bdfT",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "RIT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/department",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"department"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Bad Department",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Bad department was not inserted, dept_no already exists.\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "dept_name",
+									"value": "mystery",
+									"type": "text"
+								},
+								{
+									"key": "dept_no",
+									"value": "{{studentID}}-bdfT",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "RIT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/department",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"department"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Good Department",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful Insert\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"dept_id\");\r",
+									"});\r",
+									"var json = JSON.parse(responseBody);\r",
+									"console.log(json)\r",
+									"pm.collectionVariables.set(\"good_insert_dept_id\", json.dept_id || json.success.dept_id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "dept_name",
+									"value": "mystery",
+									"type": "text"
+								},
+								{
+									"key": "dept_no",
+									"value": "{{studentID}}-testbd",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "RIT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/department",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"department"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Department Bad",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response contained 'error'. Could not update non-existent department \", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"company\": \"{{studentID}}\",\r\n    \"dept_id\":0,\r\n    \"dept_name\":\"NEW NAME\",\r\n    \"dept_no\": \"{{studentID}}-bdfnew\",\r\n    \"location\": \"Maine\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_path}}/department?",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"department"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Department Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has updated department names\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"NEW NAME\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"company\": \"{{studentID}}\",\r\n    \"dept_id\": {{good_insert_dept_id}},\r\n    \"dept_name\":\"NEW NAME\",\r\n    \"dept_no\": \"{{studentID}}-bdfNew\",\r\n    \"location\": \"Maine\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_path}}/department",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"department"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Department Bad",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// pm.test(\"Status code is 200\", function () {\r",
+									"//     pm.response.to.have.status(200);\r",
+									"// });\r",
+									"pm.test(\"Response Includes 'error'. Could Not Delete Non-Existent Department\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/department?company={{studentID}}&dept_id=0",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"department"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "dept_id",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Department Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Successful Delete\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"success\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/department?company={{studentID}}&dept_id={{good_insert_dept_id}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"department"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "dept_id",
+									"value": "{{good_insert_dept_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Good Department 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful Insert\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"dept_id\");\r",
+									"});\r",
+									"var json = JSON.parse(responseBody);\r",
+									"console.log(json)\r",
+									"pm.collectionVariables.set(\"good_insert_dept_id\", json.dept_id || json.success.dept_id || 0);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "dept_name",
+									"value": "mystery",
+									"type": "text"
+								},
+								{
+									"key": "dept_no",
+									"value": "{{studentID}}-15test",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "RIT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/department",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"department"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Department Bad",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response included 'Error'. Could not get department with dept_id 0\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/department?company={{studentID}}&dept_id=0",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"department"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "dept_id",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Department Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful Insert\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"dept_id\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/department?company={{studentID}}&dept_id={{good_insert_dept_id}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"department"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "dept_id",
+									"value": "{{good_insert_dept_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all departments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"All departments successfully returned\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"dept_id\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/departments?company={{studentID}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"departments"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employees",
+			"item": [
+				{
+					"name": "Insert Employee Bad",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Bad employee was not inserted, hire date cannot be Sunday.\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "emp_name",
+									"value": "French",
+									"type": "text"
+								},
+								{
+									"key": "emp_no",
+									"value": "{{studentID}}-Fr1",
+									"type": "text"
+								},
+								{
+									"key": "hire_date",
+									"value": "{{lastSunday}}",
+									"type": "text"
+								},
+								{
+									"key": "job",
+									"value": "test job",
+									"type": "text"
+								},
+								{
+									"key": "salary",
+									"value": "5000.0",
+									"type": "text"
+								},
+								{
+									"key": "dept_id",
+									"value": "{{good_insert_dept_id}}",
+									"type": "text"
+								},
+								{
+									"key": "mng_id",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/employee",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Employee Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful Insert\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"emp_id\");\r",
+									"});\r",
+									"var json = JSON.parse(responseBody);\r",
+									"console.log(json)\r",
+									"pm.collectionVariables.set(\"good_insert_emp_id\", json.emp_id || json.success.emp_id || 0);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "emp_name",
+									"value": "French",
+									"type": "text"
+								},
+								{
+									"key": "emp_no",
+									"value": "{{studentID}}-Fr1",
+									"type": "text"
+								},
+								{
+									"key": "hire_date",
+									"value": "{{lastMonday}}",
+									"type": "text"
+								},
+								{
+									"key": "job",
+									"value": "test job",
+									"type": "text"
+								},
+								{
+									"key": "salary",
+									"value": "5000.0",
+									"type": "text"
+								},
+								{
+									"key": "dept_id",
+									"value": "{{good_insert_dept_id}}",
+									"type": "text"
+								},
+								{
+									"key": "mng_id",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/employee",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Employee Bad",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response contained 'error'. Could not update non-existent employee \", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"company\": \"{{studentID}}\",\r\n    \"emp_id\":0,\r\n    \"emp_name\":\"french\",\r\n    \"emp_no\": \"{{studentID}}-bdftest\",\r\n    \"hire_date\": \"{{lastMonday}}\",\r\n    \"job\": \"new job\",\r\n    \"salary\": \"60000.0\",\r\n    \"dept_id\": {{good_insert_dept_id}},\r\n    \"mng_id\": 0\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_path}}/employee",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Employee Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response has updated employee information\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"bdftest\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"company\": \"{{studentID}}\",\r\n    \"emp_id\":{{good_insert_emp_id}},\r\n    \"emp_name\":\"french\",\r\n    \"emp_no\": \"{{studentID}}-bdftest\",\r\n    \"hire_date\": \"{{lastMonday}}\",\r\n    \"job\": \"new job\",\r\n    \"salary\": 60000.0,\r\n    \"dept_id\": {{good_insert_dept_id}},\r\n    \"mng_id\": 0\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_path}}/employee",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Employee Bad",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// pm.test(\"Status code is 200\", function () {\r",
+									"//     pm.response.to.have.status(200);\r",
+									"// });\r",
+									"pm.test(\"Response Includes 'error'. Could Not Delete Non-Existent Employee\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/employee?company={{studentID}}&emp_id=0",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employee"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "emp_id",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Employee Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Successful Delete\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"success\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/employee?company={{studentID}}&emp_id={{good_insert_emp_id}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employee"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "emp_id",
+									"value": "{{good_insert_emp_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Employee Good 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful Insert\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"emp_id\");\r",
+									"});\r",
+									"var json = JSON.parse(responseBody);\r",
+									"console.log(json)\r",
+									"pm.collectionVariables.set(\"good_insert_emp_id\", json.emp_id || json.success.emp_id || 0);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "emp_name",
+									"value": "French",
+									"type": "text"
+								},
+								{
+									"key": "emp_no",
+									"value": "{{studentID}}-newbdf",
+									"type": "text"
+								},
+								{
+									"key": "hire_date",
+									"value": "{{lastMonday}}",
+									"type": "text"
+								},
+								{
+									"key": "job",
+									"value": "test job",
+									"type": "text"
+								},
+								{
+									"key": "salary",
+									"value": "5000.0",
+									"type": "text"
+								},
+								{
+									"key": "dept_id",
+									"value": "{{good_insert_dept_id}}",
+									"type": "text"
+								},
+								{
+									"key": "mng_id",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/employee",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Employee Bad",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response included 'Error'. Could not get employee with emp_id 0\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/employee?company={{studentID}}&emp_id=0",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employee"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "emp_id",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Employee Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful Retrieval of Employee\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"emp_id\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/employee?company={{studentID}}&emp_id={{good_insert_emp_id}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employee"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "emp_id",
+									"value": "{{good_insert_emp_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all employees",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"All employees successfully returned\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"emp_id\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/employees?company={{studentID}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employees"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Timecards",
+			"item": [
+				{
+					"name": "Insert Timecard Bad 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Bad timecard was not inserted, start time and/or end time must be a weekday. End time must be 1 hour greater than start time.\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"dateStr\", pm.collectionVariables.get(\"lastSunday\") + \" 08:00:00\")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "emp_id",
+									"value": "{{good_insert_emp_id}}",
+									"type": "text"
+								},
+								{
+									"key": "start_time",
+									"value": "{{dateStr}}",
+									"type": "text"
+								},
+								{
+									"key": "end_time",
+									"value": "{{dateStr}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/timecard",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Timecard Bad 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Bad timecard was not inserted. End time must be 1 hour greater than start time.\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"dateStr\", pm.collectionVariables.get(\"lastMonday\") + \" 08:00:00\")\r",
+									"//pm.collectionVariables.set(\"dateStr2\", pm.collectionVariables.get(\"lastMonday\") + \" 17:00:00\")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "emp_id",
+									"value": "{{good_insert_emp_id}}",
+									"type": "text"
+								},
+								{
+									"key": "start_time",
+									"value": "{{dateStr}}",
+									"type": "text"
+								},
+								{
+									"key": "end_time",
+									"value": "{{dateStr}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/timecard",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Timecard Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful timecard insert\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"timecard_id\");\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var json = JSON.parse(responseBody);\r",
+									"console.log(json)\r",
+									"pm.collectionVariables.set(\"good_insert_timecard_id\", json.timecard_id || json.success.timecard_id || 0);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"dateStr\", pm.collectionVariables.get(\"lastMonday\") + \" 08:00:00\")\r",
+									"pm.collectionVariables.set(\"dateStr2\", pm.collectionVariables.get(\"lastMonday\") + \" 17:00:00\")\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "emp_id",
+									"value": "{{good_insert_emp_id}}",
+									"type": "text"
+								},
+								{
+									"key": "start_time",
+									"value": "{{dateStr}}",
+									"type": "text"
+								},
+								{
+									"key": "end_time",
+									"value": "{{dateStr2}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/timecard",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Timecard Bad",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response contained 'error'. Could not timecard when end time not being at least 1 hour greater than end time. \", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"dateStr\", pm.collectionVariables.get(\"lastMonday\") + \" 09:00:00\")\r",
+									"pm.collectionVariables.set(\"dateStr2\", pm.collectionVariables.get(\"lastMonday\") + \" 16:00:00\")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"company\": \"{{studentID}}\",\r\n    \"timecard_id\": {{good_insert_timecard_id}},\r\n    \"start_time\": \"{{dateStr}}\",\r\n    \"end_time\": \"{{dateStr}}\",\r\n    \"emp_id\":{{good_insert_emp_id}}\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_path}}/timecard",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Timecard Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Successful Timecard Update, It contains the updated information\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"start_time\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"dateStr\", pm.collectionVariables.get(\"lastMonday\") + \" 09:00:00\")\r",
+									"pm.collectionVariables.set(\"dateStr2\", pm.collectionVariables.get(\"lastMonday\") + \" 16:00:00\")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"company\": \"{{studentID}}\",\r\n    \"timecard_id\": {{good_insert_timecard_id}},\r\n    \"start_time\": \"{{dateStr}}\",\r\n    \"end_time\": \"{{dateStr2}}\",\r\n    \"emp_id\":{{good_insert_emp_id}}\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_path}}/timecard",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Timecard Bad",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// pm.test(\"Status code is 200\", function () {\r",
+									"//     pm.response.to.have.status(200);\r",
+									"// });\r",
+									"pm.test(\"Response Includes 'error'. Could Not Delete Non-Existent Timecard\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/timecard?company={{studentID}}&timecard_id=0",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecard"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "timecard_id",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Timecard Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Successful Delete\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"success\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/timecard?company={{studentID}}&timecard_id={{good_insert_timecard_id}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecard"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "timecard_id",
+									"value": "{{good_insert_timecard_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Timecard Good 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful timecard insert\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"timecard_id\");\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var json = JSON.parse(responseBody);\r",
+									"console.log(json)\r",
+									"pm.collectionVariables.set(\"good_insert_timecard_id\", json.timecard_id || json.success.timecard_id || 0);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"dateStr\", pm.collectionVariables.get(\"lastMonday\") + \" 08:00:00\")\r",
+									"pm.collectionVariables.set(\"dateStr2\", pm.collectionVariables.get(\"lastMonday\") + \" 17:00:00\")\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "company",
+									"value": "{{studentID}}",
+									"type": "text"
+								},
+								{
+									"key": "emp_id",
+									"value": "{{good_insert_emp_id}}",
+									"type": "text"
+								},
+								{
+									"key": "start_time",
+									"value": "{{dateStr}}",
+									"type": "text"
+								},
+								{
+									"key": "end_time",
+									"value": "{{dateStr2}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_path}}/timecard",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Timecard Bad",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response included 'Error'. Could not get timecard with timecard_id 0\", function () {\r",
+									"    pm.expect(pm.response.text().toLowerCase()).to.include(\"error\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/timecard?company={{studentID}}&timecard_id=0",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecard"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "timecard_id",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Timecard Good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful Retrieval of Timecard\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"timecard_id\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/timecard?company={{studentID}}&timecard_id={{good_insert_timecard_id}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecard"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "timecard_id",
+									"value": "{{good_insert_timecard_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all timecards",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"All timecards successfully returned\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"timecard_id\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/timecards?company={{studentID}}&emp_id={{good_insert_emp_id}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecards"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "emp_id",
+									"value": "{{good_insert_emp_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Final Delete All and Get All",
+			"item": [
+				{
+					"name": "Delete Company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful delete\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/company?company={{studentID}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"company"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all timecards",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// pm.test(\"All timecards successfully returned\", function () {\r",
+									"//     pm.expect(pm.response.text()).to.include(\"timecard_id\");\r",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/timecards?company={{studentID}}&emp_id={{good_insert_emp_id}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"timecards"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								},
+								{
+									"key": "emp_id",
+									"value": "{{good_insert_emp_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all employees",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// pm.test(\"All employees successfully returned\", function () {\r",
+									"//     pm.expect(pm.response.text()).to.include(\"emp_id\");\r",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/employees?company={{studentID}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"employees"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all departments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// pm.test(\"All departments successfully returned\", function () {\r",
+									"//     pm.expect(pm.response.text()).to.include(\"dept_id\");\r",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/departments?company={{studentID}}",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"departments"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "{{studentID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"",
+					"",
+					"",
+					"function formatDate(date) {",
+					"    var d = new Date(date),",
+					"        month = '' + (d.getMonth() + 1),",
+					"        day = '' + d.getDate(),",
+					"        year = d.getFullYear();",
+					"",
+					"    if (month.length < 2) ",
+					"        month = '0' + month;",
+					"    if (day.length < 2) ",
+					"        day = '0' + day;",
+					"",
+					"    return [year, month, day].join('-');",
+					"}",
+					"",
+					"var now = new Date();",
+					"var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());",
+					"var lastSunday = new Date(today.setDate(today.getDate()-today.getDay()));",
+					"pm.collectionVariables.set(\"lastSunday\",formatDate(lastSunday))",
+					" ",
+					"var prevMonday = new Date();",
+					"prevMonday.setDate(prevMonday.getDate() - (prevMonday.getDay() + 6) % 7);",
+					"pm.collectionVariables.set(\"lastMonday\", formatDate(prevMonday)); "
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "good_insert_dept_id",
+			"value": ""
+		},
+		{
+			"key": "base_path",
+			"value": "localhost:8080/CompanyServices"
+		},
+		{
+			"key": "lastSunday",
+			"value": ""
+		},
+		{
+			"key": "lastMonday",
+			"value": ""
+		},
+		{
+			"key": "good_insert_emp_id",
+			"value": ""
+		},
+		{
+			"key": "dateStr",
+			"value": ""
+		},
+		{
+			"key": "dateStr2",
+			"value": ""
+		},
+		{
+			"key": "good_insert_timecard_id",
+			"value": ""
+		},
+		{
+			"key": "studentID",
+			"value": "jxh6709"
+		}
+	]
+}
